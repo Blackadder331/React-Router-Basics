@@ -1,4 +1,10 @@
 import React from "react";
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Alert from 'react-bootstrap/Alert';
+import Card from "react-bootstrap/Card";
+import Container from "react-bootstrap/Container";
 import{
   BrowserRouter as Router,
   Switch,
@@ -30,37 +36,56 @@ export default function App() {
   ];
 
   return(
-    <Router> 
-        <div>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/friends">Friends</Link>
-            </li>
-            <li>
-              <Link to="/posts">Posts</Link>
-            </li>
-          </ul>
-          <Switch>
-            <Route path="/posts">
-              <Posts posts={posts} />
-            </Route>
-            <Route path="/friends">
-              <Friends names={['Tom', 'Sara', 'Henry', 'Bobert', 'Clyde']} />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </div>
-    </Router>
+    <Container>
+      <Router> 
+          <div>
+            <ButtonGroup>
+              <Button variant="outline-secondary">
+                <Link to="/">Home</Link>
+              </Button>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button variant="outline-secondary">
+                <Link to="/friends">Friends</Link>
+              </Button>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button variant="outline-secondary">
+                <Link to="/posts">Posts</Link>
+              </Button>
+            </ButtonGroup>
+            {/* <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/friends">Friends</Link>
+              </li>
+              <li>
+                <Link to="/posts">Posts</Link>
+              </li>
+            </ul> */}
+            <Switch>
+              <Route path="/posts">
+                <Posts posts={posts} />
+              </Route>
+              <Route path="/friends">
+                <Friends names={['Tom', 'Sara', 'Henry', 'Bobert', 'Clyde']} />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+          </div>
+      </Router>
+    </Container>
   );
 }
 
 function Home() {
-  return <h2>Home</h2>
+  return (
+  <h2>The Social Network</h2>
+  );
 }
 
 function Friends(props) {
@@ -84,17 +109,17 @@ function Posts({ posts }) {
   return (
   <div>
     <h2>Posts</h2>
-    <ul>
+   
       {posts.map((post, index) => {
         return (
-          <li key={index}>
+          <Alert key={index} variant="primary">
             <Link to={`${match.url}/${post.id}`}>
               {post.title}
             </Link>
-          </li>
+          </Alert>
         );
       })}
-    </ul>
+   
     <Switch>
       <Route
         path={`${match.path}/:postId`}
@@ -115,11 +140,13 @@ function Posts({ posts }) {
 
 function Post(props) {
   const { data } = props;
-  return (
-    <div>
-      <h3>{data.title}</h3>
-      <h4>{data.date}</h4>
-      <p>{data.content}</p>
-    </div>
+  return data == undefined ? <h1>404 Not Found</h1> : (
+    <Card>
+      <Card.Header>{data.title}</Card.Header>
+      <Card.Body>
+        <Card.Subtitle>{data.date}</Card.Subtitle>
+        <Card.Text>{data.content}</Card.Text>
+      </Card.Body>
+    </Card>
   );
 }
